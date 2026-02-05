@@ -311,7 +311,7 @@ class INA3221 {
     // Resets INA3221
     void preventBrownout(float CV, float LV,float HV);
     void enableUnderVoltageRegisters(float LV,float HV);
-    uint16_t INA3221::voltsToReg(float v);
+    uint16_t voltsToReg(float v);
 };
 
 #endif
