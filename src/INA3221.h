@@ -131,6 +131,8 @@ class INA3221 {
         uint16_t reserved : 1;
     } __attribute__((packed)) masken_reg_t;
 
+    uint16_t CRIT_MAX_VAL =  0xFFFF;
+
     // Arduino's I2C library
     TwoWire *_i2c;
 
