@@ -307,6 +307,11 @@ class INA3221 {
 
     // Gets bus voltage in V.
     float getVoltage(ina3221_ch_t channel);
+
+    // Resets INA3221
+    void preventBrownout(float CV, float LV,float HV);
+    void enableUnderVoltageRegisters(float LV,float HV);
+    uint16_t INA3221::voltsToReg(float v);
 };
 
 #endif

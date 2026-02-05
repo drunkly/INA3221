@@ -517,3 +517,64 @@ float INA3221::getVoltage(ina3221_ch_t channel) {
 
     return voltage_V;
 }
+
+void INA3221::preventBrownout(float CV, float LV,float HV) {
+    if(CV<LV){
+        enableUnderVoltageRegisters(LV,HV);
+    }
+}
+
+// Convierte voltios a valor del registro PV (LSB = 8 mV, bits 15-3)
+uint16_t INA3221::voltsToReg(float v) {
+    return static_cast<uint16_t>((v / 0.008 + 0.5) ) << 3;
+}
+
+void INA3221::enableUnderVoltageRegisters(float CV, float LV,float HV) {
+    uint16_t prev;
+    uint16_t pvHi = voltsToReg(HV);
+    uint16_t pvLo = voltsToReg(LV);
+    
+    conf_reg_t conf_reg;
+    masken_reg_t mask_reg;
+    _read(INA3221_REG_CONF, (uint16_t *)&conf_reg);
+    
+    conf_reg.avg_mode=0;
+    conf_reg.ch3_en=0;
+    conf_reg.ch2_en=0;
+    conf_reg.reset=0;    
+    _write(INA3221_REG_CONF, (uint16_t *)&conf_reg);
+    
+
+    //Mask/Enable 0x0F    0x24    PVEN1=1, PVEN2/3=0 → PV solo depende de CH1
+    _read(INA3221_REG_MASK_ENABLE, (uint16_t *)&mask_reg);
+    mask_reg.conv_ready = 0;
+    mask_reg.timing_ctrl_alert = 0;
+    mask_reg.pwr_valid_alert = 1;
+    mask_reg.warn_alert_ch3 = 0;
+    mask_reg.warn_alert_ch2 = 0;
+    mask_reg.warn_alert_ch1 = 0;
+    mask_reg.shunt_sum_alert = 0;
+    mask_reg.crit_alert_ch3 = 0;
+    mask_reg.crit_alert_ch2 = 0;
+    mask_reg.crit_alert_ch1 = 1;
+    mask_reg.crit_alert_latch_en = 0;
+    mask_reg.warn_alert_latch_en = 0;
+    mask_reg.shunt_sum_en_ch3 = 0;
+    mask_reg.shunt_sum_en_ch2 = 0;
+    mask_reg.shunt_sum_en_ch1 = 0;
+    mask_reg.reserved = 0;
+    _write(INA3221_REG_MASK_ENABLE, (uint16_t *)&mask_reg);
+    
+
+    //PV Upper Limit  0x10    0x0E78  3.7V → activa PV cuando Vbat > 3.7V
+    _write(INA3221_REG_PWR_VALID_HI_LIM, &pvHi); // 3.7V
+    
+
+    //PV Lower Limit  0x11    0x0DB0  3.5V → desactiva PV cuando Vbat < 3.5V
+    _write(INA3221_REG_PWR_VALID_LO_LIM, &pvLo); // 3.5V
+    
+
+    //Critical Shunt Limit CH1    0x07    0xFFFF -> desactiva CRIT
+    _write(INA3221_REG_CH1_CRIT_ALERT_LIM, &CRIT_MAX_VAL);
+}
+
