@@ -529,7 +529,7 @@ uint16_t INA3221::voltsToReg(float v) {
     return static_cast<uint16_t>((v / 0.008 + 0.5) ) << 3;
 }
 
-void INA3221::enableUnderVoltageRegisters(float CV, float LV,float HV) {
+void INA3221::enableUnderVoltageRegisters(float LV,float HV) {
     uint16_t prev;
     uint16_t pvHi = voltsToReg(HV);
     uint16_t pvLo = voltsToReg(LV);
