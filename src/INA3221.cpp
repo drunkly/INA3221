@@ -518,12 +518,6 @@ float INA3221::getVoltage(ina3221_ch_t channel) {
     return voltage_V;
 }
 
-void INA3221::preventBrownout(float CV, float LV,float HV) {
-    if(CV<LV){
-        enableUnderVoltageRegisters(LV,HV);
-    }
-}
-
 // Convierte voltios a valor del registro PV (LSB = 8 mV, bits 15-3)
 uint16_t INA3221::voltsToReg(float v) {
     return static_cast<uint16_t>((v / 0.008 + 0.5) ) << 3;
