@@ -551,7 +551,7 @@ void INA3221::enableUnderVoltageRegisters(float LV,float HV) {
     mask_reg.crit_alert_ch3 = 0;
     mask_reg.crit_alert_ch2 = 0;
     mask_reg.crit_alert_ch1 = 1;
-    mask_reg.crit_alert_latch_en = 0;
+    mask_reg.crit_alert_latch_en = 1;
     mask_reg.warn_alert_latch_en = 0;
     mask_reg.shunt_sum_en_ch3 = 0;
     mask_reg.shunt_sum_en_ch2 = 0;
