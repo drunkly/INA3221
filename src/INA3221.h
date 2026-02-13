@@ -299,7 +299,7 @@ class INA3221 {
     bool getCritAlertFlag(ina3221_ch_t channel);
 
     // Estimates offset voltage added by the series filter resitors
-    int16_t estimateOffsetVoltage(ina3221_ch_t channel, uint16_t busVoltage);
+    int32_t estimateOffsetVoltage(ina3221_ch_t channel, uint16_t busVoltage);
 
     // Gets current in mA.
     float getCurrent(ina3221_ch_t channel);
