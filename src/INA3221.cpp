@@ -524,15 +524,8 @@ float INA3221::getVoltage(ina3221_ch_t channel) {
     return voltage_V;
 }
 
-// Convierte voltios a valor del registro PV (LSB = 8 mV, bits 15-3)
-uint16_t INA3221::voltsToReg(float v) {
-    return static_cast<uint16_t>((v / 0.008 + 0.5) ) << 3;
-}
-
-void INA3221::enableUnderVoltageRegisters(float LV,float HV) {
+void INA3221::enableUnderVoltageRegisters(int16_t LmV,int16_t HmV) {
     uint16_t prev;
-    uint16_t pvHi = voltsToReg(HV);
-    uint16_t pvLo = voltsToReg(LV);
     
     conf_reg_t conf_reg;
     masken_reg_t mask_reg;
@@ -567,12 +560,10 @@ void INA3221::enableUnderVoltageRegisters(float LV,float HV) {
     
 
     //PV Upper Limit  0x10    0x0E78  3.7V → activa PV cuando Vbat > 3.7V
-    _write(INA3221_REG_PWR_VALID_HI_LIM, &pvHi); // 3.7V
-    
+    _write(INA3221_REG_PWR_VALID_HI_LIM, (uint16_t *)&HmV);
 
     //PV Lower Limit  0x11    0x0DB0  3.5V → desactiva PV cuando Vbat < 3.5V
-    _write(INA3221_REG_PWR_VALID_LO_LIM, &pvLo); // 3.5V
-    
+    _write(INA3221_REG_PWR_VALID_LO_LIM, (uint16_t *)&LmV);
 
     //Critical Shunt Limit CH1    0x07    0xFFFF -> desactiva CRIT
     _write(INA3221_REG_CH1_CRIT_ALERT_LIM, &CRIT_MAX_VAL);

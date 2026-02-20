@@ -311,8 +311,7 @@ class INA3221 {
     float getVoltage(ina3221_ch_t channel);
 
     // Resets INA3221
-    void enableUnderVoltageRegisters(float LV,float HV);
-    uint16_t voltsToReg(float v);
+    void enableUnderVoltageRegisters(int16_t LmV,int16_t HmV);
 };
 
 #endif
