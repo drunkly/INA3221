@@ -525,8 +525,6 @@ float INA3221::getVoltage(ina3221_ch_t channel) {
 }
 
 void INA3221::enableUnderVoltageRegisters(int16_t LmV,int16_t HmV) {
-    uint16_t prev;
-    
     conf_reg_t conf_reg;
     masken_reg_t mask_reg;
     _read(INA3221_REG_CONF, (uint16_t *)&conf_reg);
