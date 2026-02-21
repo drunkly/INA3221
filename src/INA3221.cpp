@@ -558,7 +558,7 @@ void INA3221::enableUnderVoltageRegisters(int16_t LmV,int16_t HmV) {
     
 
     //PV Upper Limit  0x10    0x0E78  3.7V → activa PV cuando Vbat > 3.7V
-    //_write(INA3221_REG_PWR_VALID_HI_LIM, (uint16_t *)&HmV);
+    _write(INA3221_REG_PWR_VALID_HI_LIM, (uint16_t *)&HmV);
 
     //PV Lower Limit  0x11    0x0DB0  3.5V → desactiva PV cuando Vbat < 3.5V
     _write(INA3221_REG_PWR_VALID_LO_LIM, (uint16_t *)&LmV);
