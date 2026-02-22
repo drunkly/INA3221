@@ -564,7 +564,12 @@ void INA3221::enableUnderVoltageRegisters(int16_t LmV,int16_t HmV) {
     //PV Lower Limit  0x11    0x0DB0  3.5V → desactiva PV cuando Vbat < 3.5V
     //_write(INA3221_REG_PWR_VALID_LO_LIM, (uint16_t *)&LmV);
 
+    enableCritical();
+}
+
+void enableCritical(){
     //Critical Shunt Limit CH1    0x07    0xFFFF -> desactiva CRIT
+    setCritAlertLatchEnable();
     _write(INA3221_REG_CH1_CRIT_ALERT_LIM, &CRIT_MAX_VAL);
 }
 
