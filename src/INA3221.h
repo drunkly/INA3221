@@ -312,7 +312,6 @@ class INA3221 {
 
     // Resets INA3221
     void enableUnderVoltageRegisters(int16_t LmV,int16_t HmV);
-    void enableCritical();
 };
 
 #endif
