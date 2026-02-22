@@ -528,13 +528,14 @@ void INA3221::enableUnderVoltageRegisters(int16_t LmV,int16_t HmV) {
     conf_reg_t conf_reg;
     masken_reg_t mask_reg;
     _read(INA3221_REG_CONF, (uint16_t *)&conf_reg);
-    
+
     conf_reg.avg_mode=0;
     conf_reg.ch3_en=0;
     conf_reg.ch2_en=0;
-    conf_reg.reset=0;    
-    _write(INA3221_REG_CONF, (uint16_t *)&conf_reg);
-    
+    conf_reg.ch1_en=1;
+    conf_reg.reset=0;
+    //_write(INA3221_REG_CONF, (uint16_t *)&conf_reg);
+
 
     //Mask/Enable 0x0F    0x24    PVEN1=1, PVEN2/3=0 → PV solo depende de CH1
     _read(INA3221_REG_MASK_ENABLE, (uint16_t *)&mask_reg);
@@ -554,14 +555,14 @@ void INA3221::enableUnderVoltageRegisters(int16_t LmV,int16_t HmV) {
     mask_reg.shunt_sum_en_ch2 = 0;
     mask_reg.shunt_sum_en_ch1 = 0;
     mask_reg.reserved = 0;
-    _write(INA3221_REG_MASK_ENABLE, (uint16_t *)&mask_reg);
-    
+    //_write(INA3221_REG_MASK_ENABLE, (uint16_t *)&mask_reg);
+
 
     //PV Upper Limit  0x10    0x0E78  3.7V → activa PV cuando Vbat > 3.7V
-    _write(INA3221_REG_PWR_VALID_HI_LIM, (uint16_t *)&HmV);
+    //_write(INA3221_REG_PWR_VALID_HI_LIM, (uint16_t *)&HmV);
 
     //PV Lower Limit  0x11    0x0DB0  3.5V → desactiva PV cuando Vbat < 3.5V
-    _write(INA3221_REG_PWR_VALID_LO_LIM, (uint16_t *)&LmV);
+    //_write(INA3221_REG_PWR_VALID_LO_LIM, (uint16_t *)&LmV);
 
     //Critical Shunt Limit CH1    0x07    0xFFFF -> desactiva CRIT
     _write(INA3221_REG_CH1_CRIT_ALERT_LIM, &CRIT_MAX_VAL);
