@@ -46,7 +46,7 @@ typedef enum {
     INA3221_CH3    
 } ina3221_ch_t;
 
-#define INA3221_CH_NUM sizeof(ina3221_ch_t)
+#define INA3221_CH_NUM (3)
 
 // Registers
 typedef enum {
@@ -109,7 +109,7 @@ class INA3221 {
         uint16_t ch2_en : 1;
         uint16_t ch1_en : 1;
         uint16_t reset : 1;
-    } __attribute__((packed)) conf_reg_t;
+    } __attribute__((packed)) __attribute__ ((aligned (2))) conf_reg_t;
 
     // Mask/Enable register
     typedef struct {
@@ -129,7 +129,7 @@ class INA3221 {
         uint16_t shunt_sum_en_ch2 : 1;
         uint16_t shunt_sum_en_ch1 : 1;
         uint16_t reserved : 1;
-    } __attribute__((packed)) masken_reg_t;
+    } __attribute__((packed)) __attribute__ ((aligned (2))) masken_reg_t;
 
     uint16_t CRIT_MAX_VAL =  0xFFFF;
 
